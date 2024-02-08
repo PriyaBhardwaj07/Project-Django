@@ -1,0 +1,70 @@
+    {% extends 'base.html' %}
+    
+    
+{% block content %}
+
+    <!--body-->
+    <!-- Sorting Options -->
+    <div class="container-fluid mb-2">
+        <div class="row justify-content-end">
+          <div class="col-md-2">
+            <label for="sortOptions">Sort by:</label>
+            <select class="form-control" id="sortOptions">
+              <option value="price">Price</option>
+              <option value="newArrival">New Arrival</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    <div class="container-fluid mt-3"> <!--mt-3 means margin from top will be 3 -->
+      <div class = "row">
+        <!--filter-->
+        <!--col-lg-3 means our screen has 12 parts so we are using 3 parts-->
+
+        <div class="col-lg-2 mx-auto">
+			<div class="list-group">
+
+                <a href="/" class="list-group-item list-group-item-action ">All Products</a>
+                {% for category in categories %}
+				<a href="/?category={{category.id}}" class="list-group-item list-group-item-action ">{{category.id}} {{category.name}}</a>
+                {% endfor %}
+			</div>
+		</div>
+
+         <!--all the products-->
+        <div id = 'products' class="col-lg-10 mx-auto">
+            <div class="row mx-auto">
+                {% for product in products %}
+                <div class="col-md-3 mb-3">
+                  <div class="card">
+                    <img src="{{product.image.url}}" class="card-img-top" alt="..." onclick="openModal('{{product.image.url}}')">
+                    <div class="card-body">
+                      <p class="card-title">{{product.name}}</p>
+                      <p class="card-text"><b>{{product.price}}</b></p>
+                      <a href="#" class="btn btn-primary btn-block">Add to Cart</a>
+                      <a href="#" class="btn btn-success btn-block mt-2">Buy Now</a>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+        </div>
+
+      </div>
+      </div>
+    
+  
+      <!-- Modal for displaying larger image -->
+      <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <img id="modalImage" src="" class="img-fluid" alt="Large Image">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+{% endblock %}
+

@@ -1,0 +1,74 @@
+    {% extends 'base.html' %}
+
+
+    {% block content %}
+    <!--with container class margin is added in the left and right of the page -->
+    <div class = "container">
+        <div class ="p-4 m-4">
+            <div class = "col-lg-5 mx-auto border rounded pt -4"> <!--pt means padding from top -->
+                <h3 class="alert alert-primary border rounded font-weight-bold">Create an Account</h3>
+                <form action ="/signup" method = "POST">
+                     {% csrf_token %}
+
+                      <!-- FIRST NAME -->
+                <div class="form-group">
+                    <label for="">First Name</label>
+                    <input required type="text" name="firstname"
+                     id="" value="{{values.first_name}}" class="form-control form-control-sm" 
+                     placeholder="">
+                </div>
+
+                <!-- LAST NAME -->
+                <div class="form-group">
+                    <label for="">Last Name</label>
+                    <input required type="text" name="lastname" 
+                    id="" value="{{values.last_name}}" class="form-control form-control-sm"
+                    >
+                </div>
+
+                 <!-- EMAIL -->
+                 <div class="form-group">
+                    <label for="">Email</label>
+                    <input required type="email" name="email" id="" value = "{{values.email}}"class="form-control" placeholder="abc@gmail.com" >
+                  </div>
+            <!-- PHONE -->
+                <div class="form-group">
+                    <label for="">Phone</label>
+                    <input required type="text" name="phone" 
+                    id="" value = "{{values.last_name}}"class="form-control form-control-sm"
+                    value="{{values.phone}}"
+                    placeholder=""
+                    >
+                </div>
+                 <!-- ADDRESS -->
+                 <div class="form-group">
+                    <label for="">Address</label>
+                    <input required type="text" name="address" 
+                    id="" value="{{values.address}}" class="form-control form-control-sm"
+                    >
+                </div>
+                <!-- GENDER -->
+                <div class="form-group">
+                     <label for="gender">Gender</label>
+                      <select name="gender" id="gender" class="form-control form-control-sm">
+                        <option value="male" {% if values.gender == 'male' %}selected{% endif %}>Male</option>
+                        <option value="female" {% if values.gender == 'female' %}selected{% endif %}>Female</option>
+                        <option value="other" {% if values.gender == 'other' %}selected{% endif %}>Other</option>
+                     </select>
+                    </div>
+
+                    <!-- PASSWORD-->
+                    <div class="form-group">
+                        <label for="">password</label>
+                        <input required type="password" name="password" id="" class="form-control" placeholder="" >
+                      </div>
+
+                        <div class="form-group">
+                        <input class="btn btn-sm btn-warning" type="submit" value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}
