@@ -37,7 +37,6 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
    path('', include('appvincartapp.urls')),
-    path('api/user/',include('authenticate.urls'))
 ]
 
 if settings.DEBUG:
