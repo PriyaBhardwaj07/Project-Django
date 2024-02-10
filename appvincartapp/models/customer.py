@@ -1,3 +1,4 @@
+"""
 from django.db import models
 
 class Customer(models.Model):
@@ -16,7 +17,7 @@ class Customer(models.Model):
     
     def register(self):
         self.save()
-        
+"""  
     
     
     

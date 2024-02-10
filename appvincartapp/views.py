@@ -2,7 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .models.product import Product
 from .models.category import Category
-from .models.customer import Customer
+#from authenticate.models import 
+#from .models.customer import Customer
 
 def index(request):
     # Print the category_id to check if it's being extracted correctly
@@ -48,6 +49,8 @@ def signup(request):
         # MANDATORY CONDITIONS 
         print(firstName, lastName, email, phone, address, gender, password)
         
+        
+        
         customer = Customer(
             firstName=firstName,
             lastName=lastName,
@@ -57,6 +60,9 @@ def signup(request):
             gender=gender,
             password=password
         )
+        
+        
+        
         customer.register()
  # JavaScript code to show a pop-up and redirect to the homepage
         popup_script = """

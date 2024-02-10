@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Cart
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1></h1>
+
+        {% if cart_empty %}
+            <p>Your cart is empty.</p>
+        {% else %}
+            <div id="cart" style="text-align: center;">
+                <h2>Cart Items</h2>
+                <ul style="list-style: none; padding: 0;">
+                    {% for item in cart_items %}
+                        <li style="margin-bottom: 40px;">
+                            <div>
+                                <span style="font-size: 1.5rem;">{{ item.products_id.name }}</span><br>
+                                <span style="font-size: 1.2rem;">Quantity: {{ item.quantity }}</span><br>
+                                <span style="font-size: 1.2rem;">Price: Rs {{ item.products_id.price }}</span><br>
+                                <form method="post" action="{% url 'deletefromcart'%}" style="display: inline-block; margin-bottom: 10px;">
+                                    {% csrf_token %}
+                                    <button type="submit" style="background-color: red; color: white; padding: 15px 30px; font-size: 1.2rem;">Delete</button>
+                                </form>
+                                <form method="post" action="{% url 'saveforlater'  %}" style="display: inline-block; margin-bottom: 10px;">
+                                    {% csrf_token %}
+                                    <button type="submit" style="background-color: #007bff; color: white; padding: 15px 30px; font-size: 1.2rem;">Wishlist</button>
+                                </form>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'home' %}">
+                    <button style="background-color: #ffc107; color: black; margin: 10px; padding: 15px 30px; font-size: 1.5rem;">Back</button>
+                </a>
+                <a href="#">
+                    <button style="background-color: #28a745; color: white; margin: 10px; padding: 15px 30px; font-size: 1.5rem;">Buy Now</button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

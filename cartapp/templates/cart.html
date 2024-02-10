@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+     Cart
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1></h1>
+
+        {% if cart_empty %}
+            <p>No Items !! Empty Cart </p>
+        {% else %}
+            <div id="cart" style="text-align: center;">
+                <h2>My Cart</h2>
+                <ul style="list-style: none; padding: 0;">
+                    {% for item in cart_items %}
+                        <li style="margin-bottom: 40px;">
+                            <div>
+                                <span>{{ item.products_id.name }}</span><br>
+                                <span>Quantity  {{ item.quantity }}</span><br>
+                                <span>Price: Rs.{{ item.products_id.price }}</span><br>
+                                <form method="post" action="{% url 'deletefromcart'%}">
+                                    {% csrf_token %}
+                                    <button type="submit" style="background-color: red; color: white; margin-right: auto; padding: 15px 30px; font-size: 1.5rem;">Delete Item</button>
+                                </form>
+                                <form method="post" action="{% url 'saveforlater'  %}">
+                                    {% csrf_token %}
+                                    <button type="submit" style="background-color: #007bff; color: white; margin-left: auto; padding: 15px 30px; font-size: 1.5rem;">Wishlist</button>
+                                </form>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'home' %}"><button style="background-color: #ffc107; color: black; margin-right: auto; padding: 15px 30px; font-size: 1.5rem;">Home</button></a>
+                <a href="#"><button style="background-color: #28a745; color: white; margin-left: auto; padding: 15px 30px; font-size: 1.5rem;">Buy Now</button></a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

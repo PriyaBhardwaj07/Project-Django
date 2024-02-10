@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+
+<body>
+    <h1>Welcome to the Homepage</h1>
+    <p>Click the links below to navigate:</p>
+    <ul>
+        <li><a href="{% login.html 'login' %}">Login</a></li>
+        <li><a href="{% registration.html 'register' %}">Register</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="{% profile.html 'profile' %}">Profile</a></li>
+        {% endif %}
+    </ul>
+</body>
+
+</html>

@@ -9,10 +9,9 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 from datetime import timedelta
-import os
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,12 +29,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
-    'appvincartapp',
+    #'appvincartapp',
+     'productapp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'authenticate',
+    'cartapp',
+   # 'orderapp',
 ]
 
 MIDDLEWARE = [
@@ -61,10 +61,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'AppvinCart.urls'
 
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+       # 'DIRS': [('authenticate/templates'),],
+       'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
             ],
         },
     },
@@ -209,4 +213,7 @@ PASSWORD_RESET_TIMEOUT = 900
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    
 ]
+
+LOGIN_REDIRECT_URL = '' 

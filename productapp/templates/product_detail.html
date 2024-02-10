@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" data-toggle="modal" data-target="#productModal">
+        </div>
+        <div class="col-md-8">
+            <h1 style="font-size: 2rem;">{{ product.name }}</h1>
+            <p><small style="font-size: 1.2rem;">Stock Status {{ product.stock_status }}</small></p>
+            <p><small style="font-size: 1.2rem;">Price {{ product.price }}</small></p>
+            <p><small style="font-size: 1.2rem;">Quantity {{ product.quantity }}</small></p>
+            <p><small style="font-size: 1.2rem;">Color {{ product.color }}</small></p>
+            {% if product.discount %}
+                <p><small style="font-size: 1.2rem;"> {{ product.discount }}% Off</small></p>
+            {% else %}
+                <p><small style="font-size: 1.2rem;">No Discount Available</small></p>
+            {% endif %}
+            <hr>
+            <p style="font-size: 1.4rem;">{{ product.description }}</p>
+            <form method="post" action="{% url 'addtocart' product.id user_id  %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning mb-2" style="font-size: 1.2rem;">Add to Cart</button>
+            </form>
+            <a href="#" class="btn btn-primary mb-2" style="font-size: 1.2rem;">Buy Now</a>
+            <a href="{% url 'home' %}" class="btn btn-pink mb-2" style="font-size: 1.2rem;">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+<!-- Product Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel" style="font-size: 2rem;">{{ product.name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

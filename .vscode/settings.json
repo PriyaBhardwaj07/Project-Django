@@ -1,9 +1,16 @@
 {
     "cSpell.words": [
+        "addcart",
         "Appvin",
+        "appvincart",
         "appvincartapp",
+        "authtoken",
+        "cartapp",
         "categoryid",
         "dotenv",
+        "orderapp",
+        "productapp",
+        "resetforgotpassword",
         "simplejwt"
     ]
 }

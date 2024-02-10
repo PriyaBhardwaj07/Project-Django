@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models.product import Product
 from .models.category import Category
-from .models.customer import Customer
+#from .models.customer import Customer
 # Register your models here.
 
 class ProductTable(admin.ModelAdmin):
@@ -12,4 +12,4 @@ class CategoryTable(admin.ModelAdmin):
 
 admin.site.register(Product,ProductTable)
 admin.site.register(Category)
-admin.site.register(Customer)
+#admin.site.register(Customer)

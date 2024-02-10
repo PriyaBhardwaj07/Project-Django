@@ -2,40 +2,26 @@ from django.contrib import admin
 from authenticate.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-# Register your models here.
 class UserModelAdmin(BaseUserAdmin):
-
-
-    # The fields to be used in displaying the User model.
-    # These override the definitions on the base UserModelAdmin
-    # that reference specific fields on auth.User.
-    
-    # with this list you can see the things you want to see
-    list_display = ["id","email", "name", "is_admin"]
-    list_filter = ["is_admin"]
+    list_display = ["id", "email", "first_name", "last_name", "is_admin"]
+    list_filter = ["role_id"]  # Use an actual field for filtering
     fieldsets = (
         ("User Credentials", {"fields": ["email", "password"]}),
-        ("Personal info", {"fields": ["name"]}),
+        ("Personal info", {"fields": ["first_name", "last_name"]}),
         ("Permissions", {"fields": ["is_admin"]}),
     )
-    # add_fieldsets is not a standard ModelAdmin attribute. UserModelAdmin
-    # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
         (
             None,
             {
                 "classes": ["wide"],
-                "fields": ["email", "name", "password1", "password2"],
+                "fields": ["email", "first_name", "last_name", "password1", "password2"],
             },
         ),
     )
     search_fields = ["email"]
-    ordering = ("email","id")
+    ordering = ("email", "id")
     filter_horizontal = ()
-
 
 # Now register the new UserModelAdmin...
 admin.site.register(User, UserModelAdmin)
-
-
-

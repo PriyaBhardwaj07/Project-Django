@@ -1,16 +1,12 @@
-from django.urls import path, include
-from authenticate.views import SendPasswordResetEmailView, UserChangePasswordView, UserLoginView, UserPasswordResetView, UserProfileView, UserRegistrationView
-from django.conf.urls.static import static
+from django.urls import path
+from .views import SendPasswordResetEmailView, UserChangePasswordView, UserPasswordResetView, UserProfileView, UserRegistrationView, UserLoginView, UserLogoutView, UserRegistrationView
 
-
-urlpatterns = [
-   # path('', include('appvincartapp.urls')),
-    path('register/',UserRegistrationView.as_view(),name='register'),
-    path('login/',UserLoginView.as_view(),name='login'),
-    path('profile/',UserProfileView.as_view(),name='profile'),
-    path('changepassword/',UserChangePasswordView.as_view(),name='changepassword'),
-    path('send-reset-password-email/',SendPasswordResetEmailView.as_view(),name='send-reset-password-email'),
-    path('reset-password/<uid>/<token>/',UserPasswordResetView.as_view(),name='reset-password'),
-    
-    
+urlpatterns=[
+    path('register/', UserRegistrationView.as_view() ,name='register'),
+    path('login/', UserLoginView.as_view() ,name='login'),
+    path('profile/', UserProfileView.as_view() ,name='profile'),
+    path('changepassword/', UserChangePasswordView.as_view() ,name='changepassword'),
+    path('resetforgotpassword/',SendPasswordResetEmailView.as_view(), name='reset_forgot_password'),
+    path('resetpassword/<uid>/<token>/',UserPasswordResetView.as_view(), name='reset_password'), # adding slash at the ed of writting this url is really important, although automatically adds a slash at the end ; but that's troublesome too.
+    path('logout/',UserLogoutView.as_view(), name='logout'),
 ]
