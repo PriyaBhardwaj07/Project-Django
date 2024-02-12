@@ -23,7 +23,7 @@ rating_choices = (
 )
         
 class FeedBack(models.Model):
-    feedback = models.CharField(max_length = 500)
+    feedback = models.CharField(max_length = 200)
     user_id = models.ManyToManyField(User, related_name='feedback')
     rating_category = models.IntegerField(null = True, choices = rating_choices)
     product_id = models.ForeignKey(Product, related_name='feedback', on_delete=models.SET_NULL, null=True, blank=True)
