@@ -38,7 +38,7 @@ urlpatterns = [
     path('auth/', include('authenticate.urls')),
     path('', include('productapp.urls')),
     path('cart/', include('cartapp.urls')),
-    # path('order/', include('orderapp.urls')),
+    path('order/', include('orderapp.urls')),
 ]
 
 if settings.DEBUG:

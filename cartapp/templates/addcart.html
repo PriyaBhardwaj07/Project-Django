@@ -2,44 +2,70 @@
 {% load static %}
 
 {% block title %}
-    Cart
+    Add to Cart
 {% endblock %}
 
 {% block content %}
     <div class="container mt-5">
-        <h1></h1>
+        <h1>Add to Cart</h1>
 
-        {% if cart_empty %}
-            <p>Your cart is empty.</p>
-        {% else %}
-            <div id="cart" style="text-align: center;">
-                <h2>Cart Items</h2>
-                <ul style="list-style: none; padding: 0;">
-                    {% for item in cart_items %}
-                        <li style="margin-bottom: 40px;">
-                            <div>
-                                <span style="font-size: 1.5rem;">{{ item.products_id.name }}</span><br>
-                                <span style="font-size: 1.2rem;">Quantity: {{ item.quantity }}</span><br>
-                                <span style="font-size: 1.2rem;">Price: Rs {{ item.products_id.price }}</span><br>
-                                <form method="post" action="{% url 'deletefromcart'%}" style="display: inline-block; margin-bottom: 10px;">
-                                    {% csrf_token %}
-                                    <button type="submit" style="background-color: red; color: white; padding: 15px 30px; font-size: 1.2rem;">Delete</button>
-                                </form>
-                                <form method="post" action="{% url 'saveforlater'  %}" style="display: inline-block; margin-bottom: 10px;">
-                                    {% csrf_token %}
-                                    <button type="submit" style="background-color: #007bff; color: white; padding: 15px 30px; font-size: 1.2rem;">Wishlist</button>
-                                </form>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <a href="{% url 'home' %}">
-                    <button style="background-color: #ffc107; color: black; margin: 10px; padding: 15px 30px; font-size: 1.5rem;">Back</button>
-                </a>
-                <a href="#">
-                    <button style="background-color: #28a745; color: white; margin: 10px; padding: 15px 30px; font-size: 1.5rem;">Buy Now</button>
-                </a>
-            </div>
-        {% endif %}
+        <form id="add-to-cart-form" method="post">
+            {% csrf_token %}
+            <label for="user_id">User ID</label>
+            <input type="text" id="user_id" name="user_id">
+            <br>
+            <label for="product_id">Product ID</label>
+            <input type="text" id="product_id" name="product_id">
+            <br>
+            <label for="quantity">Quantity</label>
+            <input type="number" id="quantity" name="quantity" value="1">
+            <br>
+            <button type="submit" id="add-to-cart-btn" class="btn-primary">Add to Cart</button>
+        </form>
+
+        <div id="message-box" style="display: none;"></div>
     </div>
+
+    <style>
+        .btn-primary {
+            background-color: blue;
+            color: white;
+            /* You can add more styles as needed */
+            padding: 8px 16px; /* Example: Adjust padding */
+            border: none; /* Example: Remove border */
+            cursor: pointer; /* Example: Add pointer cursor */
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('add-to-cart-form').addEventListener('submit', function (event) {
+                event.preventDefault(); 
+    
+                var formData = new FormData(this);
+                var user_id = formData.get('user_id');
+                var product_id = formData.get('product_id');
+                var quantity = formData.get('quantity') || 1; 
+    
+                fetch(`/cart/addtocart/${user_id}/${product_id}/`, { 
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    
+                    var messageBox = document.getElementById('message-box');
+                    messageBox.innerText = data.message;
+                    messageBox.style.display = 'block';
+    
+                  
+                    setTimeout(function () {
+                        messageBox.style.display = 'none';
+                    }, 3000);
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+    
 {% endblock %}

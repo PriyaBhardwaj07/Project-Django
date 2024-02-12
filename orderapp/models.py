@@ -2,8 +2,18 @@ from django.db import models
 from authenticate.models import User
 from productapp.models import Product
 from cartapp.models import Cart
-from datetime import datetime, timedelta
 import random
+
+class Order(models.Model):
+    user_id = models.ForeignKey(User, on_delete = models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete = models.CASCADE)
+    total_amount = models.DecimalField(max_digits=10,decimal_places=2, default =0)
+
+    def save(self, *args, **kwargs):
+        total = sum(item.products.price for item in self.cart.cart_items.all())
+        self.Total_amount = total    
+        super().save(*args, **kwargs)
+
 rating_choices = (
     (1, '1'),
     (2, '2'),
@@ -11,26 +21,11 @@ rating_choices = (
     (4, '4'),
     (5, '5'),
 )
-# Create your models here.
-class Order(models.Model):
-    user_id = models.ForeignKey(User, on_delete = models.CASCADE)
-    order_id = models.OneToOneField(Cart, on_delete = models.CASCADE)
-    Total_amount = models.DecimalField(max_digits=10,decimal_places=2, default =0)
-    estimated_delivery_date = models.DateField(blank = True, default=(datetime.now().date()+timedelta(6)))
-    
-    def save(self, *args, **kwargs):
-        if not self.Estimated_delivery_date:
-            today=datetime.now().date()
-            random_days= random.randint(2,5)
-            self.estimated_delivery_date = today + timedelta(days=random_days)
-        
-        total = sum(product.Price for product in self.order.product.all())
-        self.Total_amount = total    
-        super().save(*args, **kwargs)
         
 class FeedBack(models.Model):
     feedback = models.CharField(max_length = 500)
+    user_id = models.ManyToManyField(User, related_name='feedback')
     rating_category = models.IntegerField(null = True, choices = rating_choices)
-    product_id = models.ForeignKey(Product, related_name='feedbacks', on_delete=models.SET_NULL, null=True, blank=True)
-    user_id = models.ManyToManyField(User, related_name='feedbacks')
-    
+    product_id = models.ForeignKey(Product, related_name='feedback', on_delete=models.SET_NULL, null=True, blank=True)
+   
+

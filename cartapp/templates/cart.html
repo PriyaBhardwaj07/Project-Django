@@ -7,34 +7,44 @@
 
 {% block content %}
     <div class="container mt-5">
-        <h1></h1>
+        <h1 style="color: blue;"> Cart</h1>
 
         {% if cart_empty %}
-            <p>No Items !! Empty Cart </p>
+            <p style="color: blue;">Empty Cart !!!</p>
         {% else %}
-            <div id="cart" style="text-align: center;">
-                <h2>My Cart</h2>
-                <ul style="list-style: none; padding: 0;">
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="{% url 'wishlist' user_id=user_id %}" class="btn btn-warning mr-2">Wishlist</a>
+                </div>
+                <div class="col-md-6 text-right">
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+                    <a href="{% url 'add_cart_to_order' user_id=user_id %}" class="btn btn-warning ml-2">Buy</a>
+                </div>
+            </div>
+
+            <div id="cart" class="mt-4">
+                <h2 style="color: blue;">Cart Item</h2>
+                <ul class="list-group">
                     {% for item in cart_items %}
-                        <li style="margin-bottom: 40px;">
-                            <div>
-                                <span>{{ item.products_id.name }}</span><br>
-                                <span>Quantity  {{ item.quantity }}</span><br>
-                                <span>Price: Rs.{{ item.products_id.price }}</span><br>
-                                <form method="post" action="{% url 'deletefromcart'%}">
+                        <li class="list-group-item" style="background-color: blue; color: white;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>{{ item.products.name }}</span>
+                                <span class="text-dark">Quantity: <span class="text-dark">{{ item.quantity }}</span></span>
+                                <span class="text-dark">Price: <span class="text-dark">$ {{ item.products.price }}</span></span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <form method="post" action="{% url 'delete_from_cart' item.cart.user.id item.products.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" style="background-color: red; color: white; margin-right: auto; padding: 15px 30px; font-size: 1.5rem;">Delete Item</button>
+                                    <button type="submit" class="btn btn-danger mr-2">Delete</button>
                                 </form>
-                                <form method="post" action="{% url 'saveforlater'  %}">
+                                <form method="post" action="{% url 'transfer_to_save_for_later' item.cart.user.id item.products.id %}">
                                     {% csrf_token %}
-                                    <button type="submit" style="background-color: #007bff; color: white; margin-left: auto; padding: 15px 30px; font-size: 1.5rem;">Wishlist</button>
+                                    <button type="submit" class="btn btn-warning">Save for Later</button>
                                 </form>
                             </div>
                         </li>
                     {% endfor %}
                 </ul>
-                <a href="{% url 'home' %}"><button style="background-color: #ffc107; color: black; margin-right: auto; padding: 15px 30px; font-size: 1.5rem;">Home</button></a>
-                <a href="#"><button style="background-color: #28a745; color: white; margin-left: auto; padding: 15px 30px; font-size: 1.5rem;">Buy Now</button></a>
             </div>
         {% endif %}
     </div>

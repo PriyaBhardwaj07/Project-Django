@@ -3,31 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} Cart {% endblock %}</title>
+    <title>{% block title %}Shopping Cart{% endblock %}</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <!-- Custom CSS -->
     <style>
         /* Custom styles for the navbar */
         .navbar {
-            background-color: #007bff; /* Blue background color */
+            background-color: blue; /* Blue background color */
         }
         .navbar-brand {
             color: white;
             font-weight: bold;
-            text-align: center; /* Center the brand text */
-        }
-        .navbar-nav {
-            text-align: center; /* Center the navigation links */
         }
         .navbar-nav .nav-link {
             color: white;
-            display: block; /* Each link on a new line */
-            margin-bottom: 10px; /* Add some space between links */
-            font-weight: normal; /* Reset font weight for links */
-        }
-        .navbar-nav .nav-link.active {
-            font-weight: bold; /* Make the active link bold */
         }
         .navbar-nav .nav-link:hover {
             text-decoration: underline;
@@ -36,16 +26,22 @@
             background-color: white;
         }
 
+        /* Custom styles for the main content area */
+        .main-content {
+            margin-top: 60px; /* Adjust as needed to avoid overlapping with the fixed navbar */
+        }
+
         /* Custom styles for the footer */
         footer {
             position: fixed;
             bottom: 0;
             width: 100%;
             height: 60px; /* Adjust as needed */
-            background-color: #007bff; /* Blue background color */
+            background-color: blue; /* Blue background color */
             color: white;
             text-align: center;
             line-height: 60px; /* Vertical centering */
+            transform: translateY(-50%); /* Center the footer vertically */
         }
     </style>
 </head>
@@ -53,27 +49,16 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'cart:home' %}">
-                 <strong>Cart</strong>
+            <a class="navbar-brand" href="{% url 'cart' user_id=request.user.id %}">
+                Shopping Cart
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cart:home' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cart:save_for_later' %}">Wishlist</a>
-                    </li>
-                </ul>
-            </div>
+            <!-- Replace the toggle menu with a different button -->
+            <a class="btn btn-primary ml-auto" href="{% url 'home' %}" role="button">Home</a>
         </div>
     </nav>
 
-    <!-- Cart Display -->
-    <div class="container mt-5">
+    <!-- Main Content -->
+    <div class="container mt-5 main-content">
         {% block content %}
         {% endblock %}
     </div>

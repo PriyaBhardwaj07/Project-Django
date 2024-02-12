@@ -7,34 +7,61 @@
             <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid" data-toggle="modal" data-target="#productModal">
         </div>
         <div class="col-md-8">
-            <h1 style="font-size: 2rem;">{{ product.name }}</h1>
-            <p><small style="font-size: 1.2rem;">Stock Status {{ product.stock_status }}</small></p>
-            <p><small style="font-size: 1.2rem;">Price {{ product.price }}</small></p>
-            <p><small style="font-size: 1.2rem;">Quantity {{ product.quantity }}</small></p>
-            <p><small style="font-size: 1.2rem;">Color {{ product.color }}</small></p>
+            <h1>{{ product.name }}</h1>
+            <p><small>Stock Status: {{ product.stock_status }}</small></p>
+            <p><small>Price: {{ product.price }}</small></p>
+            <p><small>Quantity: {{ product.quantity }}</small></p>
+            <p><small>Color: {{ product.color }}</small></p>
             {% if product.discount %}
-                <p><small style="font-size: 1.2rem;"> {{ product.discount }}% Off</small></p>
+                <p><small>Upto {{ product.discount }}% Off</small></p>
             {% else %}
-                <p><small style="font-size: 1.2rem;">No Discount Available</small></p>
+                <p><small>No Discounts </small></p>
             {% endif %}
             <hr>
-            <p style="font-size: 1.4rem;">{{ product.description }}</p>
-            <form method="post" action="{% url 'addtocart' product.id user_id  %}">
+            <p>{{ product.description }}</p>
+            <form method="post" action="{% url 'add_to_cart' user_id product.id  %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-warning mb-2" style="font-size: 1.2rem;">Add to Cart</button>
+                <button type="submit" class="btn btn-success">Add to Cart</button>
             </form>
-            <a href="#" class="btn btn-primary mb-2" style="font-size: 1.2rem;">Buy Now</a>
-            <a href="{% url 'home' %}" class="btn btn-pink mb-2" style="font-size: 1.2rem;">Back to Home</a>
+            <form method="post" action="{% url 'add_product_to_order' user_id=request.user.id product_id=product.id  %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Buy Now</button>
+            </form>   <a href="{% url 'home' %}" class="btn btn-secondary"></a>
         </div>
     </div>
 </div>
+<hr>
+               
+                <h2>Reviews</h2>
+                {% if feedbacks %}
+                    <div class="row">
+                        {% for feedback in feedbacks %}
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <p class="card-text">{{ feedback.feedback }}</p>
+                                        <p class="card-text">Rating {{ feedback.rating_category}}</p>
+                                            \
 
+                                        </p>
+                                        <p class="card-text">User {{ feedback.feedbacks.user_id.name}}  -  {{ feedback.feedbacks.user_id.email}}</p>
+
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No reviews</p>
+                {% endif %}
+            </div>
 <!-- Product Modal -->
 <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel" style="font-size: 2rem;">{{ product.name }}</h5>
+                <h5 class="modal-title" id="productModalLabel">{{ product.name }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -49,3 +76,4 @@
     </div>
 </div>
 {% endblock %}
+
