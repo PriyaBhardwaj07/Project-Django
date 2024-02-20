@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        /* Add your custom CSS styles here */
+
+        body {
+            font-family: Arial, sans-serif; /* Set the default font family for the body */
+        }
+
+        h1 {
+            font-size: 24px; /* Set the font size for the h1 element */
+        }
+
+        label {
+            font-size: 16px; /* Set the font size for the label element */
+        }
+
+        #card-element {
+            font-size: 16px; /* Set the font size for the card element */
+        }
+
+        #card-errors {
+            font-size: 14px; /* Set the font size for the error message */
+            color: red; /* Customize the error message color */
+        }
+
+        #submit-button, .btn {
+            font-size: 18px; /* Set the font size for the buttons */
+            margin-top: 10px; /* Add some space between the buttons */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Payment </h1>
+
+<form id="payment-form">
+    <div>
+        <label for="card-element">
+           ENTER YOUR CARD DETAILS 
+        </label>
+        <div id="card-element">
+            <!-- A Stripe Element will be inserted here. -->
+        </div>
+        <!-- Used to display form errors. -->
+        <div id="card-errors" role="alert"></div>
+    </div>
+
+    <button id="submit-button">Confirm Payment</button>
+    <a class="btn btn-outline-dark" href="{% url 'process_payment' %}">INVOICE</a>
+</form>
+
+<script>
+    // Create a Stripe client.
+    var stripe = Stripe('pk_test_51OkIzmSGCDrMJpDVQqOef2Hr4Wi89LnpnOnxsJCoSOyf8z7tsCSj6DBH5099uymfyUFhiGzJjSzdpZ5NmgRxBDih00f88b687J');
+
+    // Create an instance of Elements.
+    var elements = stripe.elements();
+
+    // Create an instance of the card Element.
+    var card = elements.create('card');
+
+    // Add an instance of the card Element into the card-element div.
+    card.mount('#card-element');
+
+    // Handle real-time validation errors from the card Element.
+    card.addEventListener('change', function(event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+
+    // Handle form submission.
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Disable the submit button to prevent multiple submissions.
+        document.getElementById('submit-button').disabled = true;
+
+        // Create payment method.
+        stripe.createPaymentMethod('card', card).then(function(result) {
+            if (result.error) {
+                // Show error message to your user.
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+
+                // Enable the submit button.
+                document.getElementById('submit-button').disabled = false;
+            } else {
+                // Send payment method ID to your server.
+                var paymentMethodId = result.paymentMethod.id;
+                // You can now submit this paymentMethodId to your Django backend for further processing.
+                console.log('Payment Method ID:', paymentMethodId);
+
+                // For demonstration purposes, this example just displays a success message.
+                alert('Payment successful! Payment Method ID: ' + paymentMethodId);
+            }
+        });
+    }); 
+</script>
+
+</body>
+</html>

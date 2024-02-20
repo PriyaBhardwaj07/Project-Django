@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Confirmation</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #add8e6; /* Light Blue Background */
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #000; /* Black Text Color */
+        }
+        h1 {
+            color: #007bff;
+        }
+        .payment-info {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .back-to-home {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Payment Confirmation</h1>
+        <p>Your payment was successful!</p>
+        <div class="payment-info">
+            <!-- Uncomment the following lines if you want to display payment details -->
+            {% comment %} <strong>Amount:</strong> ${{ '{:,.2f}'.format(payment_intent.amount / 100) }} <br> {% endcomment %}
+            {% comment %} <strong>Payment Method:</strong> {{ payment_intent.payment_method_details.card.brand }} {% endcomment %}
+            {% comment %} ending in {{ payment_intent.payment_method_details.card.last4 }} {% endcomment %}
+        </div>
+        <a class="back-to-home" href="{% url 'home' %}">Back to Home</a>
+    </div>
+</body>
+</html>
