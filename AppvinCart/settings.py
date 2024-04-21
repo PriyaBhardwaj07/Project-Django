@@ -9,11 +9,13 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 from datetime import timedelta
 from decouple import config
-
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p0lsp2b(gpw9(t(=21$^ajl!9xkhoq5z-ifqobm@mtb#r9rake'
+SECRET_KEY = os.getenv('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -33,25 +36,28 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     #'appvincartapp',
-     'productapp',
+    'productapp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "corsheaders",
+    #"corsheaders",
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken', # check 
     'authenticate',
+    #'cartapps'
     'cartapp',
     'orderapp',
+    'payment',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
+    #"corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -60,7 +66,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'AppvinCart.urls'
-
 
 
 TEMPLATES = [
@@ -87,17 +92,17 @@ WSGI_APPLICATION = 'AppvinCart.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
-    'default': {
+    "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "newdb",
-        "USER": "priya",
-        "PASSWORD": "Hello98765",
-        "HOST": "127.0.0.1",
-        "PORT": "3306",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", default="localhost"),
+        "PORT": os.getenv("DB_PORT", default=3306),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -139,16 +144,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'authenticate.User'
+AUTH_USER_MODEL = 'authenticate.User' # so foreign key constraint don't come
 MEDIA_URL = "/downloads/"
 MEDIA_ROOT = BASE_DIR
 
-STATIC_ROOT = BASE_DIR / "static"  # Adjust the path based on your project's structure
-# jwt tokenization
+STATIC_ROOT = BASE_DIR / "static"  # path 
+
+
+# JWT -----
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': [
@@ -175,13 +182,10 @@ EMAIL_HOST_PASSWORD = config('EMAIL_PASS')
 EMAIL_USE_TLS = True
 
 
-
-
-
 # JWT SETTINGS
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20), # CAN BE MODIFIED
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),    # CAN BE MODIFIED
 
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
@@ -196,8 +200,8 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
     
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
-    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),         # CAN BE MODIFIED
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),    # CAN BE MODIFIED
 
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
@@ -207,7 +211,7 @@ SIMPLE_JWT = {
 #    "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 
 }
-# the password will ve valid for 15 minute only
+# the password will ve valid for 15 minute only but you can modify 
 PASSWORD_RESET_TIMEOUT = 900 
 
 CORS_ALLOWED_ORIGINS = [
@@ -217,3 +221,20 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 LOGIN_REDIRECT_URL = '' 
+
+
+# for payment stripe keys
+
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY ')
+
+
+
+# STRIPE_WEBHOOK_SECRET= ""
+# webhook -  an endpoint on your server that receives requests from Stripe, 
+# notifying you about events that happen on your account such as a customer
+# disputing a charge or a successful recurring payment
+
+# PAYMENTINTENT:
+# it is used as it keeps the tracks of the customer how many times has he used the 
+# card for payment and failed and success history
